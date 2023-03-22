@@ -1,0 +1,29 @@
+{
+  "name": "API_REST_MONEY",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/annakks/API_REST_MONEY.git",
+  "author": "Ana Carolina dos Santos Rocha <78958795+annakks@users.noreply.github.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --exec ts-node ./src/index.ts",
+    "migration:generate": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate ./src/migrations/default",
+    "migration:run": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run ",
+    "migration:create": "cd ./src/db/migrations && typeorm migration:create"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.15.1",
+    "nodemon": "^2.0.21",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@h4ad/serverless-adapter": "^2.16.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "pg": "^8.8.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.10"
+  }
+}
