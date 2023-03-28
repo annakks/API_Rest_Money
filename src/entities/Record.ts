@@ -3,7 +3,7 @@ import { User } from "./User";
 
 @Entity('records')
 export class Record{
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ type: 'text'})
@@ -19,10 +19,9 @@ export class Record{
     date: Date;
 
     @Column({ type: 'text'})
-    observation: string; 
+    observation: string;
 
-    @ManyToOne(()=> User, (user) => user.records)
-    @JoinColumn({ name: 'record_id'})
-    user: User;
+    @Column({ type: 'integer' })
+    user: number;
 
 }

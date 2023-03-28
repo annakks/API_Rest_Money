@@ -3,19 +3,16 @@ import { Record } from "./Record";
 
 @Entity('users')
 export class User{
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ type: 'text'})
     name: string;
 
-    @Column({ type: 'text'})
-    email: string;
+    @Column({type: 'text', unique: true})
+    email: string
 
     @Column({ type: 'text'})
     password: string;
-
-    @OneToMany(()=> Record, record => record.user)
-    records: Record[]
 
 }
