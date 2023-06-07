@@ -24,6 +24,8 @@ routes.get('/recordsUser', authMiddleware, new RecordController().listRecordsUse
 //Soma Registros
 routes.get('/sumRecords', authMiddleware, new RecordController().sumRecordsUser)
 
+//routes.get('/record', authMiddleware, new RecordController().getRecordId)
+
 
 
 export default routes

@@ -63,6 +63,8 @@ export class RecordController {
         }
     }
 
+    
+
     async listRecordsUser(req: Request, res: Response) {
 
         const { authorization } = req.headers
@@ -152,4 +154,5 @@ export class RecordController {
             return res.status(400).json({message: "Internal Server Error"})
         }
     }
+
 }
