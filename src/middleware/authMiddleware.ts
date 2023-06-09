@@ -4,7 +4,7 @@ import { userRepository } from "../repositories/UserRepository";
 import jwt from 'jsonwebtoken'
 
 type JwtPayLoad = {
-    id: number
+    idUser: number
 }
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -16,9 +16,9 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
 
     const token = authorization.split( ' ' )[1]
 
-    const {id} = jwt.verify(token, process.env.JWT_PASS ?? '') as JwtPayLoad
+    const {idUser} = jwt.verify(token, process.env.JWT_PASS ?? '') as JwtPayLoad
 
-    const user = await userRepository.findOneBy({ id })
+    const user = await userRepository.findOneBy({ idUser })
 
 	if (!user) {
 		throw new BadRequestError('Usuário não autorizado')

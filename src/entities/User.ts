@@ -4,7 +4,7 @@ import { Record } from "./Record";
 @Entity('users')
 export class User{
     @PrimaryGeneratedColumn()
-    id: number;
+    idUser: number;
 
     @Column({ type: 'text'})
     name: string;

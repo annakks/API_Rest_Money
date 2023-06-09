@@ -6,7 +6,7 @@ import { BadRequestError, UnauthorizedError } from "../helpers/api-errors";
 import jwt from 'jsonwebtoken'
 
 type JwtPayLoad = {
-    id: number
+    idUser: number
 }
 
 export class RecordController {
@@ -35,9 +35,9 @@ export class RecordController {
 
         const token = authorization.split( ' ' )[1]
 
-        const {id} = jwt.verify(token, process.env.JWT_PASS ?? '') as JwtPayLoad
+        const {idUser} = jwt.verify(token, process.env.JWT_PASS ?? '') as JwtPayLoad
 
-        const user = await userRepository.findOneBy({ id })
+        const user = await userRepository.findOneBy({ idUser })
 
 	    if (!user) {
 	    	throw new BadRequestError('Usuário não autorizado')
@@ -46,7 +46,7 @@ export class RecordController {
         const { password: _, ...loggerUser } = user
 
 
-        const id_user = user.id
+        const id_user = user.idUser
 
         try{
            const newRecord = recordRepository.create({ 
@@ -63,7 +63,52 @@ export class RecordController {
         }
     }
 
-    
+    async updateRecord (req: Request, res: Response) {
+
+        const {idRecord, type, name, value, date, observation, id_User} = req.body
+        const { authorization } = req.headers
+
+        if(!authorization) {
+            throw new UnauthorizedError( 'Usuário não autorizado' )
+        }
+
+        const token = authorization.split( ' ' )[1]
+
+        const {idUser} = jwt.verify(token, process.env.JWT_PASS ?? '') as JwtPayLoad
+
+        const user = await userRepository.findOneBy({ idUser })
+
+	    if (!user) {
+	    	throw new BadRequestError('Usuário não autorizado')
+	    }
+
+        const { password: _, ...loggerUser } = user
+
+
+        const id_user = user.idUser
+
+        
+        try {
+            const record = await recordRepository.findOneBy({ idRecord })
+            if (!record) {
+                return res.status(404).json({ message: 'Registro não encontrado' });
+            }
+            
+            record.type = type ; 
+            record.name = name ;
+            record.value = value ;
+            record.date = date ;
+            record.observation = observation ;
+
+            await recordRepository.save(record);
+
+            return res.status(200).json(record);
+
+        } catch (error) {
+            console.log(error);
+            return res.status(404).json({message: "Internal Sever Error"})
+        }
+    }
 
     async listRecordsUser(req: Request, res: Response) {
 
@@ -75,9 +120,9 @@ export class RecordController {
 
         const token = authorization.split( ' ' )[1]
 
-        const {id} = jwt.verify(token, process.env.JWT_PASS ?? '') as JwtPayLoad
+        const {idUser} = jwt.verify(token, process.env.JWT_PASS ?? '') as JwtPayLoad
 
-        const user = await userRepository.findOneBy({ id })
+        const user = await userRepository.findOneBy({ idUser })
 
 	    if (!user) {
 	    	throw new BadRequestError('Usuário não autorizado')
@@ -86,7 +131,7 @@ export class RecordController {
         const { password: _, ...loggerUser } = user
 
 
-        let id_user = loggerUser.id
+        let id_user = loggerUser.idUser
 
         try{            
             const recordsUser = await recordRepository.findBy({user: id_user})
@@ -109,9 +154,9 @@ export class RecordController {
 
         const token = authorization.split( ' ' )[1]
 
-        const {id} = jwt.verify(token, process.env.JWT_PASS ?? '') as JwtPayLoad
+        const {idUser} = jwt.verify(token, process.env.JWT_PASS ?? '') as JwtPayLoad
 
-        const user = await userRepository.findOneBy({ id })
+        const user = await userRepository.findOneBy({ idUser })
 
 	    if (!user) {
 	    	throw new BadRequestError('Usuário não autorizado')
@@ -120,7 +165,7 @@ export class RecordController {
         const { password: _, ...loggerUser } = user
 
 
-        let id_user = loggerUser.id
+        let id_user = loggerUser.idUser
 
         const recordsUser = await recordRepository.findBy({user: id_user})
 
