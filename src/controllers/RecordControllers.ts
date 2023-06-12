@@ -12,8 +12,22 @@ type JwtPayLoad = {
 export class RecordController {
     async listRecors(req: Request, res: Response) {
 
+        const { authorization } = req.headers
+
+        if(!authorization) {
+            throw new UnauthorizedError( 'Usuário não autorizado' )
+        }
+
+        const token = authorization.split( ' ' )[1]
+
+        const {idUser} = jwt.verify(token, process.env.JWT_PASS ?? '') as JwtPayLoad
+
+
+
         try{
-            const records = await recordRepository.find({})
+            const records = await userRepository.findOneBy({ idUser })
+
+
 
             return res.json({records})
 
